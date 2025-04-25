@@ -2,21 +2,16 @@ import { useEffect, useState } from "react";
 import { Product } from "../types";
 import { api } from "../api/axios";
 import { fetchCategories } from "../api/products";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useFilters } from "../hooks/useFilters";
+import { useSort } from "../hooks/useSort";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const [view, setView] = useState<"grid" | "list">("grid");
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState<"grid" | "list">("grid");
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(1000);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // загрузка данных
   useEffect(() => {
     api
       .get<Product[]>("/products")
@@ -29,35 +24,24 @@ export default function HomePage() {
       .catch((err) => console.error("Failed to load categories", err));
   }, []);
 
-  // применяем параметры из URL
-  useEffect(() => {
-    const cat = searchParams.get("category");
-    const min = Number(searchParams.get("min") || 0);
-    const max = Number(searchParams.get("max") || 1000);
+  const {
+    selectedCategory,
+    setSelectedCategory,
+    minPrice,
+    setMinPrice,
+    maxPrice,
+    setMaxPrice,
+    resetFilters,
+    filtered,
+  } = useFilters(products);
 
-    if (cat) setSelectedCategory(cat);
-    setMinPrice(min);
-    setMaxPrice(max);
-  }, []);
-
-  // обновляем URL при изменении фильтров
-  useEffect(() => {
-    const params: Record<string, string> = {};
-    if (selectedCategory) params.category = selectedCategory;
-    if (minPrice !== 0) params.min = String(minPrice);
-    if (maxPrice !== 1000) params.max = String(maxPrice);
-    setSearchParams(params);
-  }, [selectedCategory, minPrice, maxPrice]);
-
-  const filtered = products
-    .filter((p) => (selectedCategory ? p.category === selectedCategory : true))
-    .filter((p) => p.price >= minPrice && p.price <= maxPrice);
+  const { sorted, sortOption, setSortOption } = useSort(filtered);
 
   if (loading) return <div className="p-4">Loading...</div>;
 
   return (
     <div className="p-4">
-      {/* Фильтры + переключатель */}
+      {/* Фильтры + Переключение вида */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div className="flex flex-col sm:flex-row gap-4 flex-wrap">
           <select
@@ -91,19 +75,25 @@ export default function HomePage() {
             />
           </div>
 
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value as any)}
+            className="border px-3 py-2 rounded"
+          >
+            <option value="price-asc">Сначала дешёвые</option>
+            <option value="price-desc">Сначала дорогие</option>
+            <option value="name-asc">По названию (А-Я)</option>
+            <option value="rating-desc">По рейтингу</option>
+          </select>
+
           <button
-            onClick={() => {
-              setSelectedCategory(null);
-              setMinPrice(0);
-              setMaxPrice(1000);
-            }}
+            onClick={resetFilters}
             className="px-3 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100"
           >
             Сбросить фильтры
           </button>
         </div>
 
-        {/* Переключение Grid/List */}
         <div className="flex gap-2 justify-end">
           <button
             onClick={() => setView("grid")}
@@ -138,7 +128,7 @@ export default function HomePage() {
             : "flex flex-col gap-4"
         }
       >
-        {filtered.map((product) => (
+        {sorted.map((product) => (
           <Link
             to={`/product/${product.id}`}
             key={product.id}
