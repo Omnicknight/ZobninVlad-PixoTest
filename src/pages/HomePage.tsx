@@ -149,6 +149,9 @@ export default function HomePage() {
               <h2 className="text-sm font-semibold mt-2 line-clamp-2">
                 {product.title}
               </h2>
+              <p className="text-sm text-yellow-500">
+                ⭐ {product.rating.rate} / 5 ({product.rating.count} reviews)
+              </p>
               <p className="text-sm text-gray-600">${product.price}</p>
             </div>
           </Link>

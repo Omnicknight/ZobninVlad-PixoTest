@@ -1,6 +1,7 @@
 import { useAppSelector } from "../hooks/useAppSelector";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { removeFromCart, updateQuantity } from "../store/cartSlice";
+import { Link } from "react-router-dom";
 
 export default function CartPage() {
   const items = useAppSelector((state) => state.cart.items);
@@ -63,6 +64,16 @@ export default function CartPage() {
           <div className="text-right mt-4 text-lg font-bold">
             Итого: <span className="text-blue-600">${total.toFixed(2)}</span>
           </div>
+          {items.length > 0 && (
+            <div className="text-right mt-6">
+              <Link
+                to="/checkout"
+                className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              >
+                Перейти к оформлению
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>
