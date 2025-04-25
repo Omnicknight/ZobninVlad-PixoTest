@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
-import { Product } from '../types'
+import { Product } from "../types";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -24,7 +25,11 @@ export default function HomePage() {
   return (
     <div className="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       {products.map((product) => (
-        <div key={product.id} className="border rounded p-2 hover:shadow">
+        <Link
+          to={`/product/${product.id}`}
+          key={product.id}
+          className="border rounded p-2 hover:shadow block"
+        >
           <img
             src={product.image}
             alt={product.title}
@@ -34,7 +39,7 @@ export default function HomePage() {
             {product.title}
           </h2>
           <p className="text-sm text-gray-600">${product.price}</p>
-        </div>
+        </Link>
       ))}
     </div>
   );
