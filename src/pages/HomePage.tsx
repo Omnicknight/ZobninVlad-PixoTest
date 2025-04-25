@@ -47,7 +47,7 @@ export default function HomePage() {
           <select
             value={selectedCategory ?? ""}
             onChange={(e) => setSelectedCategory(e.target.value || null)}
-            className="border px-3 py-2 rounded"
+            className="border px-3 py-2 rounded dark:bg-gray-900 dark:text-white"
           >
             <option value="">Все категории</option>
             {categories.map((cat) => (
@@ -57,13 +57,13 @@ export default function HomePage() {
             ))}
           </select>
 
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center dark:bg-gray-900 dark:text-white">
             <input
               type="number"
               placeholder="от"
               value={minPrice}
               onChange={(e) => setMinPrice(Number(e.target.value))}
-              className="border px-2 py-1 w-20 rounded"
+              className="border px-2 py-1 w-20 rounded dark:bg-gray-900 dark:text-white"
             />
             <span>-</span>
             <input
@@ -71,14 +71,14 @@ export default function HomePage() {
               placeholder="до"
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
-              className="border px-2 py-1 w-20 rounded"
+              className="border px-2 py-1 w-20 rounded dark:bg-gray-900 dark:text-white"
             />
           </div>
 
           <select
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as any)}
-            className="border px-3 py-2 rounded"
+            className="border px-3 py-2 rounded dark:bg-gray-900 dark:text-white"
           >
             <option value="price-asc">Сначала дешёвые</option>
             <option value="price-desc">Сначала дорогие</option>
@@ -152,7 +152,7 @@ export default function HomePage() {
               <p className="text-sm text-yellow-500">
                 ⭐ {product.rating.rate} / 5 ({product.rating.count} reviews)
               </p>
-              <p className="text-sm text-gray-600">${product.price}</p>
+              <p className="text-sm text-gray-600 dark:text-white">${product.price}</p>
             </div>
           </Link>
         ))}

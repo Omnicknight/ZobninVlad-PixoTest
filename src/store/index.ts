@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cartSlice";
+import themeReducer from "./themeSlice";
 import type { CartItem } from "../types";
 
 // Загружаем корзину из localStorage
@@ -22,6 +23,7 @@ const preloadedState = {
 export const store = configureStore({
   reducer: {
     cart: cartReducer,
+    theme: themeReducer,
   },
   preloadedState,
 });

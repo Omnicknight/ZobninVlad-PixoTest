@@ -2,17 +2,21 @@ import { Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
-import CartIcon from "./components/CartIcon";
 import CheckoutPage from "./pages/CheckoutPage";
+import ThemeToggle from "./components/ThemeToggle";
+import ThemeHandler from "./components/ThemeHandler";
 
 export default function App() {
   return (
     <>
-      <header className="p-4 flex justify-between items-center border-b">
-        <h1 className="text-xl font-bold">
-          <Link to="/">PixoStore</Link>
-        </h1>
-        <CartIcon />
+      <ThemeHandler />
+
+      <header className="flex justify-between items-center p-4 border-b dark:border-gray-700">
+        <Link to="/" className="text-xl font-bold">
+          🛍️ PixoTest
+        </Link>
+
+        <ThemeToggle />
       </header>
 
       <Routes>
@@ -22,5 +26,5 @@ export default function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
     </>
-  )
+  );
 }
