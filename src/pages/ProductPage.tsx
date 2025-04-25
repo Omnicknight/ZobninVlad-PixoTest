@@ -2,11 +2,22 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../api/axios";
 import { Product } from "../types";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { addToCart } from "../store/cartSlice";
 
 export default function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [added, setAdded] = useState(false);
+  const dispatch = useAppDispatch();
+  const handleAddToCart = () => {
+    if (product) {
+      dispatch(addToCart(product));
+      setAdded(true);
+      setTimeout(() => setAdded(false), 1500);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -35,9 +46,13 @@ export default function ProductPage() {
         <p className="text-sm text-yellow-500">
           ⭐ {product.rating.rate} / 5 ({product.rating.count} reviews)
         </p>
-        <button className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        <button
+          onClick={handleAddToCart}
+          className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
           Add to cart
         </button>
+        {added && <p className="text-green-600 mt-2">✔️ Добавлено в корзину</p>}
       </div>
     </div>
   );
