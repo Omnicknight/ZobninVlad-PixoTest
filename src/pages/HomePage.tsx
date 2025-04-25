@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Product } from "../types";
 import { api } from "../api/axios";
-import { Link } from "react-router-dom";
 import { fetchCategories } from "../api/products";
+import { Link, useSearchParams } from "react-router-dom";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-
   const [view, setView] = useState<"grid" | "list">("grid");
   const [loading, setLoading] = useState(true);
 
@@ -15,6 +14,9 @@ export default function HomePage() {
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(1000);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // загрузка данных
   useEffect(() => {
     api
       .get<Product[]>("/products")
@@ -27,18 +29,35 @@ export default function HomePage() {
       .catch((err) => console.error("Failed to load categories", err));
   }, []);
 
+  // применяем параметры из URL
+  useEffect(() => {
+    const cat = searchParams.get("category");
+    const min = Number(searchParams.get("min") || 0);
+    const max = Number(searchParams.get("max") || 1000);
+
+    if (cat) setSelectedCategory(cat);
+    setMinPrice(min);
+    setMaxPrice(max);
+  }, []);
+
+  // обновляем URL при изменении фильтров
+  useEffect(() => {
+    const params: Record<string, string> = {};
+    if (selectedCategory) params.category = selectedCategory;
+    if (minPrice !== 0) params.min = String(minPrice);
+    if (maxPrice !== 1000) params.max = String(maxPrice);
+    setSearchParams(params);
+  }, [selectedCategory, minPrice, maxPrice]);
+
   const filtered = products
-    .filter((product) =>
-      selectedCategory ? product.category === selectedCategory : true
-    )
-    .filter(
-      (product) => product.price >= minPrice && product.price <= maxPrice
-    );
+    .filter((p) => (selectedCategory ? p.category === selectedCategory : true))
+    .filter((p) => p.price >= minPrice && p.price <= maxPrice);
 
   if (loading) return <div className="p-4">Loading...</div>;
 
   return (
     <div className="p-4">
+      {/* Фильтры + переключатель */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div className="flex flex-col sm:flex-row gap-4 flex-wrap">
           <select
@@ -71,8 +90,20 @@ export default function HomePage() {
               className="border px-2 py-1 w-20 rounded"
             />
           </div>
+
+          <button
+            onClick={() => {
+              setSelectedCategory(null);
+              setMinPrice(0);
+              setMaxPrice(1000);
+            }}
+            className="px-3 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100"
+          >
+            Сбросить фильтры
+          </button>
         </div>
 
+        {/* Переключение Grid/List */}
         <div className="flex gap-2 justify-end">
           <button
             onClick={() => setView("grid")}
@@ -99,6 +130,7 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Список товаров */}
       <div
         className={
           view === "grid"
