@@ -1,10 +1,14 @@
 import { Routes, Route, Link } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ProductPage from "./pages/ProductPage";
-import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage";
 import ThemeToggle from "./components/ThemeToggle";
 import ThemeHandler from "./components/ThemeHandler";
+import { lazy, Suspense } from "react";
+import { useAppSelector } from "./hooks/useAppSelector";
+import CartIcon from "./components/CartIcon";
+
+const HomePage = lazy(() => import("./pages/HomePage"));
+const ProductPage = lazy(() => import("./pages/ProductPage"));
+const CartPage = lazy(() => import("./pages/CartPage"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
 
 export default function App() {
   return (
@@ -15,16 +19,18 @@ export default function App() {
         <Link to="/" className="text-xl font-bold">
           🛍️ PixoTest
         </Link>
-
         <ThemeToggle />
+        <CartIcon />
       </header>
-
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/product/:id" element={<ProductPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-      </Routes>
+      {/* Для ленивой подгрузки страниц */}
+      <Suspense fallback={<div className="p-4">Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }

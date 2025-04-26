@@ -15,7 +15,7 @@ export default function CheckoutPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = (data: CheckoutFormValues) => {
+  const onSubmit = (_data: CheckoutFormValues) => {
     // Очистка корзины и редирект на главную
     dispatch(clearCart());
     // Всплывающее уведомление после оформления заказа

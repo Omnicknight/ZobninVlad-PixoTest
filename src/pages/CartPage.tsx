@@ -49,7 +49,7 @@ export default function CartPage() {
                       })
                     )
                   }
-                  className="w-16 border px-2 py-1 rounded text-center"
+                  className="w-16 border px-2 py-1 rounded text-center dark:bg-gray-900 dark:text-white"
                 />
                 <button
                   onClick={() => dispatch(removeFromCart(item.id))}
