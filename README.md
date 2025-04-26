@@ -1,54 +1,50 @@
-# React + TypeScript + Vite
+# ZobninVlad-PixoTest
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание проекта
 
-Currently, two official plugins are available:
+Это приложение — продуктовый каталог с возможностью просмотра товаров, фильтрации, сортировки, добавления в корзину и оформления заказа.  
+Проект реализован в рамках тестового задания.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Пользователь может:
+- Просматривать список товаров в виде сетки или списка
+- Фильтровать товары по категориям и диапазону цен
+- Сортировать товары по цене, названию и рейтингу
+- Добавлять товары в корзину, изменять их количество или удалять
+- Оформлять заказ с валидацией формы
+- Переключать тему приложения (светлая/тёмная)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Технологии и стек
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- React 19
+- TypeScript
+# Простое и эффективное управление глобальным состоянием
+- Redux Toolkit
+# Обеспечение перехода между страничками без перезагрузки
+- React Router v6
+# Быстрая стилизация с удобным контролем адаптивности
+- Tailwind CSS
+# Удобная работа с API запросами
+- Axios
+# Реалистичное тестирование компонентов и логики
+- Jest + Testing Library
+# Легковесная и мощная валидация форм
+- React Hook Form
+# Легкая библиотека для отображения всплывающих окон
+- react-toastify
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Установка проекта
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+# клонирование репозитория
+1) git clone https://github.com/Omnicknight/ZobninVlad-PixoTest.git
+# переход в корневую папку проекта
+2) cd ZobninVlad-PixoTest
+# установка зависимостей
+3) npm i
+# запуск проекта
+4) npm run dev
+# запуск тестов
+5) npx jest
