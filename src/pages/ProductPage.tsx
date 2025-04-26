@@ -49,6 +49,7 @@ export default function ProductPage() {
         <button
           onClick={handleAddToCart}
           className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          aria-label="Добавить в корзину"
         >
           Add to cart
         </button>

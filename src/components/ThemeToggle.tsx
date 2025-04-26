@@ -10,6 +10,7 @@ export default function ThemeToggle() {
     <button
       onClick={() => dispatch(toggleTheme())}
       className="px-2 py-1 border rounded text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+      aria-label="Переключить тему"
     >
       {theme === "dark" ? "🌙 Тёмная" : "🌞 Светлая"}
     </button>

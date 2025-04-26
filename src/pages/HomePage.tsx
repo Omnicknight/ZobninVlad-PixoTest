@@ -135,6 +135,7 @@ export default function HomePage() {
             className={`border rounded p-2 hover:shadow transition ${
               view === "list" ? "flex gap-4 items-center" : "block"
             }`}
+            role="link"
           >
             <img
               src={product.image}
@@ -152,7 +153,9 @@ export default function HomePage() {
               <p className="text-sm text-yellow-500">
                 ⭐ {product.rating.rate} / 5 ({product.rating.count} reviews)
               </p>
-              <p className="text-sm text-gray-600 dark:text-white">${product.price}</p>
+              <p className="text-sm text-gray-600 dark:text-white">
+                ${product.price}
+              </p>
             </div>
           </Link>
         ))}

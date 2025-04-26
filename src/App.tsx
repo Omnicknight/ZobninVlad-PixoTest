@@ -2,7 +2,6 @@ import { Routes, Route, Link } from "react-router-dom";
 import ThemeToggle from "./components/ThemeToggle";
 import ThemeHandler from "./components/ThemeHandler";
 import { lazy, Suspense } from "react";
-import { useAppSelector } from "./hooks/useAppSelector";
 import CartIcon from "./components/CartIcon";
 
 const HomePage = lazy(() => import("./pages/HomePage"));

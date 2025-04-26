@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Product } from "../types";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Product } from "../types";
 
 export const useFilters = (products: Product[]) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -9,31 +9,41 @@ export const useFilters = (products: Product[]) => {
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(1000);
 
-  // Загрузка фильтров из URL
+  // При загрузке подтягиваем параметры из URL
   useEffect(() => {
-    const cat = searchParams.get("category");
-    const min = Number(searchParams.get("min") || 0);
-    const max = Number(searchParams.get("max") || 1000);
+    const category = searchParams.get("category");
+    const min = searchParams.get("minPrice");
+    const max = searchParams.get("maxPrice");
 
-    if (cat) setSelectedCategory(cat);
-    setMinPrice(min);
-    setMaxPrice(max);
-  }, []);
+    if (category) setSelectedCategory(category);
+    if (min) setMinPrice(Number(min));
+    if (max) setMaxPrice(Number(max));
+  }, [searchParams]);
 
-  // Синхронизация URL при изменении фильтров
+  // Синхронизация состояния фильтров с URL
   useEffect(() => {
-    const params: Record<string, string> = {};
+    const params: any = {};
+
     if (selectedCategory) params.category = selectedCategory;
-    if (minPrice !== 0) params.min = String(minPrice);
-    if (maxPrice !== 1000) params.max = String(maxPrice);
+    if (minPrice !== 0) params.minPrice = minPrice.toString();
+    if (maxPrice !== 1000) params.maxPrice = maxPrice.toString();
+
     setSearchParams(params);
-  }, [selectedCategory, minPrice, maxPrice]);
+  }, [selectedCategory, minPrice, maxPrice, setSearchParams]);
 
-  // Применение фильтров к массиву
-  const filtered = products
-    .filter((p) => (selectedCategory ? p.category === selectedCategory : true))
-    .filter((p) => p.price >= minPrice && p.price <= maxPrice);
+  // Мемоизируем фильтрацию товаров
+  const filtered = useMemo(() => {
+    return products
+      .filter((product) => {
+        if (!selectedCategory) return true;
+        return product.category === selectedCategory;
+      })
+      .filter(
+        (product) => product.price >= minPrice && product.price <= maxPrice
+      );
+  }, [products, selectedCategory, minPrice, maxPrice]);
 
+  // Сброс фильтров
   const resetFilters = () => {
     setSelectedCategory(null);
     setMinPrice(0);
@@ -41,13 +51,13 @@ export const useFilters = (products: Product[]) => {
   };
 
   return {
+    filtered,
     selectedCategory,
-    setSelectedCategory,
     minPrice,
-    setMinPrice,
     maxPrice,
+    setSelectedCategory,
+    setMinPrice,
     setMaxPrice,
     resetFilters,
-    filtered,
   };
 };
